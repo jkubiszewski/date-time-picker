@@ -4,10 +4,11 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'picker';
 
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
+import { OwlDateTimeModule } from '../../../date-time-picker/src/lib/date-time/date-time.module';
+import { OwlNativeDateTimeModule } from '../../../date-time-picker/src/lib/adapter/native';
 
 registerLocaleData(localePl);
 

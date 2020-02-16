@@ -14,14 +14,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build picker",
-    "test": "ng test picker",
+    "build": "ng build --prod",
+    "postbuild": "cp README.md dist/date-time-picker && mkdir -p dist/date-time-picker/assets/style && node-sass --output-style=compressed projects/date-time-picker/src/assets/style/picker.scss > dist/date-time-picker/assets/style/picker.min.css",
+    "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "build_lib": "ng build picker && cp README.md dist/picker",
-    "build_css": "mkdir -p dist/picker/assets/style && node-sass --output-style=compressed projects/picker/src/sass/picker.scss > dist/picker/assets/style/picker.min.css",
-    "publish": "cd dist/picker && npm publish",
-    "package": "npm run build_lib && npm run build_css"
+    "e2e": "ng projects/date-time-picker-demo/e2e",
+    "publish": "cd dist/date-time-picker && npm publish"
   },
   "repository": {
     "type": "git",

@@ -2,10 +2,10 @@ import { Component, ViewChild } from '@angular/core';
 
 import { Moment } from 'moment';
 import * as moment from 'moment-timezone';
-import { OwlDateTimeComponent } from 'picker';
+import { OwlDateTimeComponent } from '../../../date-time-picker/src/lib/date-time/date-time-picker.component';
 
 @Component({
-  selector: 'app-root',
+  selector: 'demo-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

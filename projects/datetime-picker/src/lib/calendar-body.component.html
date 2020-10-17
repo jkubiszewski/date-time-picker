@@ -1,0 +1,29 @@
+<tr *ngFor="let row of rows; let rowIndex = index" role="row">
+  <td
+    *ngFor="let item of row; let colIndex = index"
+    class="dtp-calendar-cell {{ item.cellClass }}"
+    [tabindex]="isActiveCell(rowIndex, colIndex) ? 0 : -1"
+    [class.dtp-calendar-cell-active]="isActiveCell(rowIndex, colIndex)"
+    [class.dtp-calendar-cell-disabled]="!item.enabled"
+    [class.dtp-calendar-cell-in-range]="isInRange(item.value)"
+    [class.dtp-calendar-cell-range-from]="isRangeFrom(item.value)"
+    [class.dtp-calendar-cell-range-to]="isRangeTo(item.value)"
+    [attr.aria-label]="item.ariaLabel"
+    [attr.aria-disabled]="!item.enabled || null"
+    [style.width.%]="100 / numCols"
+    [style.paddingTop.%]="(50 * cellRatio) / numCols"
+    [style.paddingBottom.%]="(50 * cellRatio) / numCols"
+    (click)="selectCell(item)"
+  >
+    <span
+      class="dtp-calendar-cell-content"
+      [ngClass]="{
+        'dtp-calendar-cell-out': item.out,
+        'dtp-calendar-cell-today': item.value === todayValue,
+        'dtp-calendar-cell-selected': isSelected(item.value)
+      }"
+    >
+      {{ item.displayValue }}
+    </span>
+  </td>
+</tr>

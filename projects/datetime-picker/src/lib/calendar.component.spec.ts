@@ -1,0 +1,436 @@
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { Component, NgZone } from '@angular/core';
+import {
+  MockNgZone,
+  dispatchFakeEvent,
+  dispatchMouseEvent,
+  dispatchKeyboardEvent
+} from '../test-helpers';
+import { NativeDatetimeModule } from './adapter/native';
+import { DatetimePickerModule } from './datetime-picker.module';
+import { CalendarComponent } from './calendar.component';
+import { DatetimePickerIntl } from './datetime-picker-intl.service';
+import { By } from '@angular/platform-browser';
+import { ENTER, RIGHT_ARROW } from '@angular/cdk/keycodes';
+import { MonthViewComponent } from './month-view.component';
+import { YearViewComponent } from './year-view.component';
+import { MultiYearViewComponent } from './multi-year-view.component';
+import { FEB, JAN, NOV } from './utils/month-constants';
+import { SelectMode } from './datetime-picker.class';
+
+describe('CalendarComponent', () => {
+  let zone: MockNgZone;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [NativeDatetimeModule, DatetimePickerModule],
+      declarations: [
+        StandardCalendarComponent,
+        CalendarWithMinMaxComponent,
+        CalendarWithDateFilterComponent
+      ],
+      providers: [DatetimePickerIntl, { provide: NgZone, useFactory: () => (zone = new MockNgZone()) }]
+    }).compileComponents();
+  }));
+
+  describe('standard calendar', () => {
+    let fixture: ComponentFixture<StandardCalendarComponent>;
+    let testComponent: StandardCalendarComponent;
+    let calendarElement: HTMLElement;
+    let periodButton: HTMLElement;
+    let calendarInstance: CalendarComponent<Date>;
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(StandardCalendarComponent);
+      fixture.detectChanges();
+
+      const calendarDebugElement = fixture.debugElement.query(By.directive(CalendarComponent));
+      calendarElement = calendarDebugElement.nativeElement;
+
+      periodButton = calendarElement.querySelector('.dtp-control-period-button') as HTMLElement;
+      calendarInstance = calendarDebugElement.componentInstance;
+      testComponent = fixture.componentInstance;
+    });
+
+    it('should be in month view with specified month active', async(() => {
+      expect(calendarInstance.currentView).toBe('month');
+      expect(calendarInstance.pickerMoment).toEqual(new Date(2018, JAN, 31));
+    }));
+
+    it('should select date in month view', () => {
+      const monthCell = calendarElement.querySelector('[aria-label="January 31, 2018"]');
+      (monthCell as HTMLElement).click();
+
+      fixture.detectChanges();
+      expect(calendarInstance.currentView).toBe('month');
+      expect(testComponent.selected).toEqual(new Date(2018, JAN, 31));
+    });
+
+    it('should emit the selected month on cell clicked in year view', () => {
+      periodButton.click();
+      fixture.detectChanges();
+
+      expect(calendarInstance.currentView).toBe('multi-years');
+      expect(calendarInstance.pickerMoment).toEqual(new Date(2018, JAN, 31));
+
+      (calendarElement.querySelector('.dtp-calendar-cell-active') as HTMLElement).click();
+
+      fixture.detectChanges();
+
+      expect(calendarInstance.currentView).toBe('year');
+
+      (calendarElement.querySelector('.dtp-calendar-cell-active') as HTMLElement).click();
+
+      const normalizedMonth: Date = fixture.componentInstance.selectedMonth;
+      expect(normalizedMonth.getMonth()).toEqual(0);
+    });
+
+    it('should emit the selected year on cell clicked in multi-years view', () => {
+      periodButton.click();
+      fixture.detectChanges();
+
+      expect(calendarInstance.currentView).toBe('multi-years');
+      expect(calendarInstance.pickerMoment).toEqual(new Date(2018, JAN, 31));
+      (calendarElement.querySelector('.dtp-calendar-cell-active') as HTMLElement).click();
+
+      fixture.detectChanges();
+
+      const normalizedYear: Date = fixture.componentInstance.selectedYear;
+      expect(normalizedYear.getFullYear()).toEqual(2018);
+    });
+
+    it('should re-render when the i18n labels have changed', () => {
+      inject([DatetimePickerIntl], (intl: DatetimePickerIntl) => {
+        const button = fixture.debugElement.nativeElement.querySelector(
+          '.dtp-control-period-button'
+        );
+
+        intl.switchToMultiYearViewLabel = 'Go to multi-year view?';
+        intl.changes.next();
+        fixture.detectChanges();
+
+        expect(button.getAttribute('aria-label')).toBe('Go to multi-year view?');
+      });
+    });
+
+    it('should set all buttons to be `type="button"`', () => {
+      const invalidButtons = calendarElement.querySelectorAll('button:not([type="button"])');
+      expect(invalidButtons.length).toBe(0);
+    });
+
+    describe('a11y', () => {
+      describe('calendar body', () => {
+        let calendarMainEl: HTMLElement;
+
+        beforeEach(() => {
+          calendarMainEl = calendarElement.querySelector('.dtp-calendar-main') as HTMLElement;
+          expect(calendarMainEl).not.toBeNull();
+
+          dispatchFakeEvent(calendarMainEl, 'focus');
+          fixture.detectChanges();
+        });
+
+        it('should initially set pickerMoment', () => {
+          expect(calendarInstance.pickerMoment).toEqual(new Date(2018, JAN, 31));
+        });
+
+        it('should make the calendar main focusable', () => {
+          expect(calendarMainEl.getAttribute('tabindex')).toBe('-1');
+        });
+
+        it('should not move focus to the active cell on init', () => {
+          const activeCell = calendarMainEl.querySelector(
+            '.dtp-calendar-cell-active'
+          )! as HTMLElement;
+
+          spyOn(activeCell, 'focus').and.callThrough();
+          fixture.detectChanges();
+          zone.simulateZoneExit();
+
+          expect(activeCell.focus).not.toHaveBeenCalled();
+        });
+
+        it('should move focus to the active cell when the view changes', () => {
+          const activeCell = calendarMainEl.querySelector(
+            '.dtp-calendar-cell-active'
+          )! as HTMLElement;
+
+          spyOn(activeCell, 'focus').and.callThrough();
+          fixture.detectChanges();
+          zone.simulateZoneExit();
+
+          expect(activeCell.focus).not.toHaveBeenCalled();
+
+          calendarInstance.currentView = 'multi-years';
+          fixture.detectChanges();
+          zone.simulateZoneExit();
+
+          expect(activeCell.focus).toHaveBeenCalled();
+        });
+
+        describe('year view', () => {
+          beforeEach(() => {
+            dispatchMouseEvent(periodButton, 'click');
+            fixture.detectChanges();
+
+            expect(calendarInstance.currentView).toBe('multi-years');
+
+            (calendarMainEl.querySelector('.dtp-calendar-cell-active') as HTMLElement).click();
+            fixture.detectChanges();
+
+            expect(calendarInstance.currentView).toBe('year');
+          });
+
+          it('should return to month view on enter', () => {
+            const tableBodyEl = calendarMainEl.querySelector('.dtp-calendar-body') as HTMLElement;
+
+            dispatchKeyboardEvent(tableBodyEl, 'keydown', RIGHT_ARROW);
+            fixture.detectChanges();
+
+            dispatchKeyboardEvent(tableBodyEl, 'keydown', ENTER);
+            fixture.detectChanges();
+
+            expect(calendarInstance.currentView).toBe('month');
+            expect(calendarInstance.pickerMoment).toEqual(new Date(2018, FEB, 28));
+            expect(testComponent.selected).toBeUndefined();
+          });
+        });
+
+        describe('multi-years view', () => {
+          beforeEach(() => {
+            dispatchMouseEvent(periodButton, 'click');
+            fixture.detectChanges();
+
+            expect(calendarInstance.currentView).toBe('multi-years');
+          });
+
+          it('should return to year view on enter', () => {
+            const tableBodyEl = calendarMainEl.querySelector('.dtp-calendar-body') as HTMLElement;
+
+            dispatchKeyboardEvent(tableBodyEl, 'keydown', RIGHT_ARROW);
+            fixture.detectChanges();
+
+            dispatchKeyboardEvent(tableBodyEl, 'keydown', ENTER);
+            fixture.detectChanges();
+
+            expect(calendarInstance.currentView).toBe('year');
+            expect(calendarInstance.pickerMoment).toEqual(new Date(2019, JAN, 31));
+            expect(testComponent.selected).toBeUndefined();
+          });
+        });
+      });
+    });
+  });
+
+  describe('calendar with min and max', () => {
+    let fixture: ComponentFixture<CalendarWithMinMaxComponent>;
+    let testComponent: CalendarWithMinMaxComponent;
+    let calendarElement: HTMLElement;
+    let calendarInstance: CalendarComponent<Date>;
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(CalendarWithMinMaxComponent);
+      fixture.detectChanges();
+
+      const calendarDebugElement = fixture.debugElement.query(By.directive(CalendarComponent));
+      calendarElement = calendarDebugElement.nativeElement;
+
+      calendarInstance = calendarDebugElement.componentInstance;
+      testComponent = fixture.componentInstance;
+    });
+
+    it('should re-render the month view when the minDate changes', () => {
+      const monthViewDebugElm = fixture.debugElement.query(By.directive(MonthViewComponent));
+      const monthViewComp = monthViewDebugElm.componentInstance;
+      expect(monthViewComp).toBeTruthy();
+
+      spyOn(monthViewComp, 'generateCalendar').and.callThrough();
+      testComponent.minDate = new Date(2017, NOV, 1);
+      fixture.detectChanges();
+
+      expect(monthViewComp.generateCalendar).toHaveBeenCalled();
+    });
+
+    it('should re-render the month view when the maxDate changes', () => {
+      const monthViewDebugElm = fixture.debugElement.query(By.directive(MonthViewComponent));
+      const monthViewComp = monthViewDebugElm.componentInstance;
+      expect(monthViewComp).toBeTruthy();
+
+      spyOn(monthViewComp, 'generateCalendar').and.callThrough();
+      testComponent.maxDate = new Date(2017, NOV, 1);
+      fixture.detectChanges();
+
+      expect(monthViewComp.generateCalendar).toHaveBeenCalled();
+    });
+
+    it('should re-render the year view when the minDate changes', () => {
+      fixture.detectChanges();
+      const periodButton = calendarElement.querySelector(
+        '.dtp-control-period-button'
+      ) as HTMLElement;
+      periodButton.click();
+      fixture.detectChanges();
+
+      (calendarElement.querySelector('.dtp-calendar-cell-active') as HTMLElement).click();
+      fixture.detectChanges();
+
+      const yearViewDebugElm = fixture.debugElement.query(By.directive(YearViewComponent));
+      const yearViewComp = yearViewDebugElm.componentInstance;
+      expect(yearViewComp).toBeTruthy();
+
+      spyOn(yearViewComp, 'generateMonthList').and.callThrough();
+      testComponent.minDate = new Date(2017, NOV, 1);
+      fixture.detectChanges();
+
+      expect(yearViewComp.generateMonthList).toHaveBeenCalled();
+    });
+
+    it('should re-render the year view when the maxDate changes', () => {
+      fixture.detectChanges();
+      const periodButton = calendarElement.querySelector(
+        '.dtp-control-period-button'
+      ) as HTMLElement;
+      periodButton.click();
+      fixture.detectChanges();
+
+      (calendarElement.querySelector('.dtp-calendar-cell-active') as HTMLElement).click();
+      fixture.detectChanges();
+
+      const yearViewDebugElm = fixture.debugElement.query(By.directive(YearViewComponent));
+      const yearViewComp = yearViewDebugElm.componentInstance;
+      expect(yearViewComp).toBeTruthy();
+
+      spyOn(yearViewComp, 'generateMonthList').and.callThrough();
+      testComponent.maxDate = new Date(2017, NOV, 1);
+      fixture.detectChanges();
+
+      expect(yearViewComp.generateMonthList).toHaveBeenCalled();
+    });
+
+    it('should re-render the multi-years view when the minDate changes', () => {
+      fixture.detectChanges();
+      const periodButton = calendarElement.querySelector(
+        '.dtp-control-period-button'
+      ) as HTMLElement;
+      periodButton.click();
+      fixture.detectChanges();
+
+      const multiYearsViewDebugElm = fixture.debugElement.query(
+        By.directive(MultiYearViewComponent)
+      );
+      const multiYearsViewComp = multiYearsViewDebugElm.componentInstance;
+      expect(multiYearsViewComp).toBeTruthy();
+
+      spyOn(multiYearsViewComp, 'generateYearList').and.callThrough();
+      testComponent.minDate = new Date(2017, NOV, 1);
+      fixture.detectChanges();
+
+      expect(multiYearsViewComp.generateYearList).toHaveBeenCalled();
+    });
+
+    it('should re-render the multi-years view when the maxDate changes', () => {
+      fixture.detectChanges();
+      const periodButton = calendarElement.querySelector(
+        '.dtp-control-period-button'
+      ) as HTMLElement;
+      periodButton.click();
+      fixture.detectChanges();
+
+      const multiYearsViewDebugElm = fixture.debugElement.query(
+        By.directive(MultiYearViewComponent)
+      );
+      const multiYearsViewComp = multiYearsViewDebugElm.componentInstance;
+      expect(multiYearsViewComp).toBeTruthy();
+
+      spyOn(multiYearsViewComp, 'generateYearList').and.callThrough();
+      testComponent.maxDate = new Date(2017, NOV, 1);
+      fixture.detectChanges();
+
+      expect(multiYearsViewComp.generateYearList).toHaveBeenCalled();
+    });
+  });
+
+  describe('calendar with date filter', () => {
+    let fixture: ComponentFixture<CalendarWithDateFilterComponent>;
+    let testComponent: CalendarWithDateFilterComponent;
+    let calendarElement: HTMLElement;
+    let calendarInstance: CalendarComponent<Date>;
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(CalendarWithDateFilterComponent);
+      fixture.detectChanges();
+
+      const calendarDebugElement = fixture.debugElement.query(By.directive(CalendarComponent));
+      calendarElement = calendarDebugElement.nativeElement;
+      calendarInstance = calendarDebugElement.componentInstance;
+      testComponent = fixture.componentInstance;
+    });
+
+    it('should disable and prevent selection of filtered dates', () => {
+      const monthCell = calendarElement.querySelector('[aria-label="January 2, 2018"]');
+      expect(testComponent.selected).toBeFalsy();
+
+      (monthCell as HTMLElement).click();
+      fixture.detectChanges();
+
+      expect(testComponent.selected).toEqual(new Date(2018, JAN, 2));
+    });
+  });
+});
+
+@Component({
+  template: `
+    <ng-calendar
+      [(selected)]="selected"
+      [selectMode]="selectMode"
+      [pickerMoment]="pickerMoment"
+      (monthSelected)="selectedMonth = $event"
+      (yearSelected)="selectedYear = $event"
+    ></ng-calendar>
+  `
+})
+class StandardCalendarComponent {
+  selectMode: SelectMode = 'single';
+  selected: Date;
+  selectedYear: Date;
+  selectedMonth: Date;
+  pickerMoment = new Date(2018, JAN, 31);
+}
+
+@Component({
+  template: `
+    <ng-calendar
+      [selectMode]="selectMode"
+      [pickerMoment]="pickerMoment"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+    ></ng-calendar>
+  `
+})
+class CalendarWithMinMaxComponent {
+  selectMode: SelectMode = 'single';
+  startAt: Date;
+  minDate = new Date(2016, JAN, 1);
+  maxDate = new Date(2019, JAN, 1);
+  pickerMoment = new Date(2018, JAN, 31);
+}
+
+@Component({
+  template: `
+    <ng-calendar
+      [(selected)]="selected"
+      [selectMode]="selectMode"
+      [pickerMoment]="pickerMoment"
+      [dateFilter]="dateFilter"
+    ></ng-calendar>
+  `
+})
+class CalendarWithDateFilterComponent {
+  selectMode: SelectMode = 'single';
+  selected: Date;
+  pickerMoment = new Date(2018, JAN, 31);
+
+  dateFilter(date: Date) {
+    return !(date.getDate() % 2) && date.getMonth() !== NOV;
+  }
+}

@@ -1,0 +1,20 @@
+<table class="dtp-calendar-table dtp-calendar-year-table">
+  <thead class="dtp-calendar-header">
+    <tr>
+      <th class="dtp-calendar-table-divider" aria-hidden="true" colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody
+    ng-calendar-body
+    role="grid"
+    [rows]="months"
+    [numCols]="3"
+    [cellRatio]="3 / 7"
+    [activeCell]="activeCell"
+    [todayValue]="todayMonth"
+    [selectedValues]="selectedMonths"
+    [selectMode]="selectMode"
+    (keydown)="handleCalendarKeydown($event)"
+    (select)="selectCalendarCell($event)"
+  ></tbody>
+</table>

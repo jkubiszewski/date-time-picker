@@ -1,0 +1,10 @@
+<label for="daterange">Datetime range (click, then press 'Set' to modify):</label>
+<input
+  [(ngModel)]="selectedMoments"
+  [selectMode]="'range'"
+  [ngDatetimePickerToggle]="dtp"
+  [ngDatetimePicker]="dtp"
+  style="width: 100%; color: cornflowerblue"
+  id="daterange"
+/>
+<ng-datetime-picker #dtp></ng-datetime-picker>

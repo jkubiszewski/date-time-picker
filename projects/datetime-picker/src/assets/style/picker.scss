@@ -1,0 +1,537 @@
+@import '~@angular/cdk/overlay-prebuilt.css';
+
+.dtp-dialog-container {
+  position: relative;
+  pointer-events: auto;
+  box-sizing: border-box;
+  display: block;
+  padding: 1.5em;
+  box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14),
+    0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
+  overflow: auto;
+  background: #fff;
+  color: rgba(0, 0, 0, 0.87);
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+$theme-color: #3f51b5;
+
+.dtp-container,
+.dtp-container * {
+  box-sizing: border-box;
+}
+
+.dtp-container {
+  display: block;
+  font-size: 1rem;
+  background: #ffffff;
+  pointer-events: auto;
+  z-index: 1000;
+}
+
+.dtp-container-row {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.dtp-calendar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.dtp-calendar-control {
+  display: flex;
+  align-items: center;
+  font-size: 1em;
+  width: 100%;
+  padding: 0.5em;
+  color: #000000;
+
+  .dtp-calendar-control-content {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .dtp-calendar-control-button {
+      padding: 0 0.8em;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+    }
+  }
+}
+
+.dtp-calendar-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 0 0.5em 0.5em;
+  outline: 0;
+}
+
+.dtp-calendar-view {
+  display: block;
+  flex: 1 1 auto;
+}
+
+.dtp-calendar-multi-year-view {
+  display: flex;
+  align-items: center;
+
+  .dtp-calendar-table {
+    width: calc(100% - 3em);
+
+    .dtp-calendar-header th {
+      padding-bottom: 0.25em;
+    }
+  }
+}
+
+.dtp-calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  .dtp-calendar-header {
+    color: rgba(0, 0, 0, 0.4);
+
+    .dtp-weekdays {
+      th {
+        font-size: 0.7em;
+        font-weight: 400;
+        text-align: center;
+        padding-bottom: 1em;
+      }
+    }
+
+    .dtp-calendar-table-divider {
+      position: relative;
+      height: 1px;
+      padding-bottom: 0.5em;
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -0.5em;
+        right: -0.5em;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.12);
+      }
+    }
+  }
+
+  .dtp-calendar-cell {
+    position: relative;
+    height: 0;
+    line-height: 0;
+    text-align: center;
+    outline: 0;
+    color: rgba(0, 0, 0, 0.85);
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .dtp-calendar-cell-content {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 90%;
+    height: 90%;
+    font-size: 0.8em;
+    line-height: 1;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .dtp-calendar-cell-out {
+    opacity: 0.2;
+  }
+
+  .dtp-calendar-cell-today:not(.dtp-calendar-cell-selected) {
+    border-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .dtp-calendar-cell-selected {
+    color: hsla(0, 0%, 100%, 0.85);
+    background-color: $theme-color;
+
+    &.dtp-calendar-cell-today {
+      box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, 0.85);
+    }
+  }
+
+  .dtp-calendar-cell-disabled {
+    cursor: default;
+
+    & > .dtp-calendar-cell-content:not(.dtp-calendar-cell-selected) {
+      color: rgba(0, 0, 0, 0.4);
+    }
+
+    & > .dtp-calendar-cell-content.dtp-calendar-cell-selected {
+      opacity: 0.4;
+    }
+
+    & > .dtp-calendar-cell-today:not(.dtp-calendar-cell-selected) {
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .dtp-calendar-cell-active:focus
+    > .dtp-calendar-cell-content:not(.dtp-calendar-cell-selected),
+  :not(.dtp-calendar-cell-disabled):hover
+    > .dtp-calendar-cell-content:not(.dtp-calendar-cell-selected) {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  .dtp-calendar-cell-in-range {
+    background: rgba($theme-color, 0.2);
+
+    &.dtp-calendar-cell-range-from {
+      border-top-left-radius: 999px;
+      border-bottom-left-radius: 999px;
+    }
+
+    &.dtp-calendar-cell-range-to {
+      border-top-right-radius: 999px;
+      border-bottom-right-radius: 999px;
+    }
+  }
+}
+
+.dtp-timer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 7em;
+  padding: 0.5em;
+  outline: none;
+}
+
+.dtp-timer-box {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25%;
+  height: 100%;
+}
+
+.dtp-timer-content {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0.2em 0;
+
+  .dtp-timer-input {
+    display: block;
+    width: 2em;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    outline: medium none;
+    font-size: 1.2em;
+    padding: 0.2em;
+  }
+}
+
+.dtp-timer-divider {
+  display: inline-block;
+  align-self: flex-end;
+  position: absolute;
+  width: 0.6em;
+  height: 100%;
+  left: -0.3em;
+
+  &:before,
+  &:after {
+    content: '';
+    display: inline-block;
+    width: 0.35em;
+    height: 0.35em;
+    position: absolute;
+    left: 50%;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    background-color: currentColor;
+  }
+
+  &:before {
+    top: 35%;
+  }
+
+  &:after {
+    bottom: 35%;
+  }
+}
+
+.dtp-control-button {
+  user-select: none;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+  display: inline-block;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  font-size: 1em;
+  color: inherit;
+
+  .dtp-control-button-content {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+  }
+}
+
+.dtp-control-period-button {
+  .dtp-control-button-content {
+    height: 1.5em;
+    padding: 0 0.5em;
+    border-radius: 3px;
+    transition: background-color 100ms linear;
+  }
+
+  &:hover > .dtp-control-button-content {
+    background-color: rgba(0, 0, 0, 0.12);
+  }
+
+  .dtp-control-button-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1em;
+    height: 1em;
+    margin: 0.1em;
+    transition: transform 200ms ease;
+  }
+}
+
+.dtp-control-arrow-button {
+  .dtp-control-button-content {
+    padding: 0;
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  &[disabled] {
+    color: rgba(0, 0, 0, 0.4);
+    cursor: default;
+  }
+
+  svg {
+    width: 50%;
+    height: 50%;
+    fill: currentColor;
+  }
+}
+
+.dtp-inline-container,
+.dtp-popup-container {
+  position: relative;
+  width: 18.5em;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+  .dtp-calendar,
+  .dtp-timer {
+    width: 100%;
+  }
+
+  .dtp-calendar {
+    height: 20.25em;
+  }
+}
+
+.dtp-dialog-container {
+  max-height: 95vh;
+  margin: -1.5em;
+
+  .dtp-calendar {
+    min-width: 250px;
+    min-height: 330px;
+    max-width: 750px;
+    max-height: 750px;
+  }
+
+  .dtp-timer {
+    min-width: 250px;
+    max-width: 750px;
+  }
+}
+
+@media all and (orientation: landscape) {
+  .dtp-dialog-container {
+    .dtp-calendar {
+      width: 58vh;
+      height: 62vh;
+    }
+
+    .dtp-timer {
+      width: 58vh;
+    }
+  }
+}
+
+@media all and (orientation: portrait) {
+  .dtp-dialog-container {
+    .dtp-calendar {
+      width: 80vw;
+      height: 80vw;
+    }
+
+    .dtp-timer {
+      width: 80vw;
+    }
+  }
+}
+
+.dtp-container-buttons {
+  display: flex;
+  width: 100%;
+  height: 2em;
+  color: $theme-color;
+}
+
+.dtp-container-control-button {
+  font-size: 1em;
+  width: 50%;
+  height: 100%;
+  border-radius: 0;
+
+  .dtp-control-button-content {
+    height: 100%;
+    width: 100%;
+    transition: background-color 100ms linear;
+  }
+
+  &:hover {
+    .dtp-control-button-content {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.dtp-container-info {
+  padding: 0 0.5em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  .dtp-container-range {
+    outline: none;
+
+    .dtp-container-range-content {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5em 0;
+      font-size: 0.8em;
+    }
+
+    &:last-child {
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  .dtp-container-info-active {
+    color: $theme-color;
+  }
+}
+
+.dtp-container-disabled,
+.dtp-toggle-disabled {
+  opacity: 0.35;
+  filter: Alpha(Opacity=35);
+  background-image: none;
+  cursor: default !important;
+}
+
+.dtp-timer-hour12 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $theme-color;
+
+  .dtp-timer-hour12-box {
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    transition: background 200ms ease;
+
+    .dtp-control-button-content {
+      width: 100%;
+      height: 100%;
+      padding: 0.5em;
+    }
+
+    &:focus,
+    &:hover {
+      .dtp-control-button-content {
+        background: $theme-color;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+.dtp-calendar-only-current-month {
+  .dtp-calendar-cell-out {
+    visibility: hidden;
+    cursor: default;
+  }
+}
+
+.dtp-inline {
+  display: inline-block;
+}
+
+.dtp-control {
+  outline: none;
+  cursor: pointer;
+
+  .dtp-control-content {
+    outline: none;
+  }
+
+  &:focus > .dtp-control-content {
+    background-color: rgba(0, 0, 0, 0.12);
+  }
+
+  &:not(:-moz-focusring):focus > .dtp-control-content {
+    box-shadow: none;
+  }
+}
+
+.hidden-accessible {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}

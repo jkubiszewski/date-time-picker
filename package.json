@@ -1,5 +1,5 @@
 {
-  "name": "date-time-picker-app",
+  "name": "ng-datetime-picker",
   "version": "0.0.0",
   "description": "Angular Date Time Picker",
   "keywords": [
@@ -15,11 +15,11 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --prod",
-    "postbuild": "cp README.md dist/date-time-picker && mkdir -p dist/date-time-picker/assets/style && node-sass --output-style=compressed projects/date-time-picker/src/assets/style/picker.scss > dist/date-time-picker/assets/style/picker.min.css",
+    "postbuild": "cp README.md dist/datetime-picker && mkdir -p dist/datetime-picker/assets/style && node-sass --output-style=compressed projects/datetime-picker/src/assets/style/picker.scss > dist/datetime-picker/assets/style/picker.min.css",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng projects/date-time-picker-demo/e2e",
-    "publish": "cd dist/date-time-picker && npm publish"
+    "e2e": "ng projects/datetime-picker-demo/e2e",
+    "publish": "cd dist/datetime-picker && npm publish"
   },
   "repository": {
     "type": "git",

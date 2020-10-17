@@ -3,77 +3,77 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "date-time-picker": {
+    "datetime-picker": {
       "projectType": "library",
-      "root": "projects/date-time-picker",
-      "sourceRoot": "projects/date-time-picker/src",
+      "root": "projects/datetime-picker",
+      "sourceRoot": "projects/datetime-picker/src",
       "prefix": "ng",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/date-time-picker/tsconfig.lib.json",
-            "project": "projects/date-time-picker/ng-package.json"
+            "tsConfig": "projects/datetime-picker/tsconfig.lib.json",
+            "project": "projects/datetime-picker/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/date-time-picker/tsconfig.lib.prod.json"
+              "tsConfig": "projects/datetime-picker/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/date-time-picker/src/test.ts",
-            "tsConfig": "projects/date-time-picker/tsconfig.spec.json",
-            "karmaConfig": "projects/date-time-picker/karma.conf.js"
+            "main": "projects/datetime-picker/src/test.ts",
+            "tsConfig": "projects/datetime-picker/tsconfig.spec.json",
+            "karmaConfig": "projects/datetime-picker/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/date-time-picker/tsconfig.lib.json",
-              "projects/date-time-picker/tsconfig.spec.json"
+              "projects/datetime-picker/tsconfig.lib.json",
+              "projects/datetime-picker/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
         }
       }
     },
-    "date-time-picker-demo": {
+    "datetime-picker-demo": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "root": "projects/date-time-picker-demo",
-      "sourceRoot": "projects/date-time-picker-demo/src",
+      "root": "projects/datetime-picker-demo",
+      "sourceRoot": "projects/datetime-picker-demo/src",
       "prefix": "demo",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/date-time-picker-demo",
-            "index": "projects/date-time-picker-demo/src/index.html",
-            "main": "projects/date-time-picker-demo/src/main.ts",
-            "polyfills": "projects/date-time-picker-demo/src/polyfills.ts",
-            "tsConfig": "projects/date-time-picker-demo/tsconfig.app.json",
+            "outputPath": "dist/datetime-picker-demo",
+            "index": "projects/datetime-picker-demo/src/index.html",
+            "main": "projects/datetime-picker-demo/src/main.ts",
+            "polyfills": "projects/datetime-picker-demo/src/polyfills.ts",
+            "tsConfig": "projects/datetime-picker-demo/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "projects/date-time-picker-demo/src/favicon.ico",
-              "projects/date-time-picker-demo/src/assets"
+              "projects/datetime-picker-demo/src/favicon.ico",
+              "projects/datetime-picker-demo/src/assets"
             ],
-            "styles": ["projects/date-time-picker-demo/src/styles.scss"],
+            "styles": ["projects/datetime-picker-demo/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/date-time-picker-demo/src/environments/environment.ts",
-                  "with": "projects/date-time-picker-demo/src/environments/environment.prod.ts"
+                  "replace": "projects/datetime-picker-demo/src/environments/environment.ts",
+                  "with": "projects/datetime-picker-demo/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -102,32 +102,32 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "date-time-picker-demo:build"
+            "browserTarget": "datetime-picker-demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "date-time-picker-demo:build:production"
+              "browserTarget": "datetime-picker-demo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "date-time-picker-demo:build"
+            "browserTarget": "datetime-picker-demo:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/date-time-picker-demo/src/test.ts",
-            "polyfills": "projects/date-time-picker-demo/src/polyfills.ts",
-            "tsConfig": "projects/date-time-picker-demo/tsconfig.spec.json",
-            "karmaConfig": "projects/date-time-picker-demo/karma.conf.js",
+            "main": "projects/datetime-picker-demo/src/test.ts",
+            "polyfills": "projects/datetime-picker-demo/src/polyfills.ts",
+            "tsConfig": "projects/datetime-picker-demo/tsconfig.spec.json",
+            "karmaConfig": "projects/datetime-picker-demo/karma.conf.js",
             "assets": [
-              "projects/date-time-picker-demo/src/favicon.ico",
-              "projects/date-time-picker-demo/src/assets"
+              "projects/datetime-picker-demo/src/favicon.ico",
+              "projects/datetime-picker-demo/src/assets"
             ],
-            "styles": ["projects/date-time-picker-demo/src/styles.scss"],
+            "styles": ["projects/datetime-picker-demo/src/styles.scss"],
             "scripts": []
           }
         },
@@ -135,9 +135,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/date-time-picker-demo/tsconfig.app.json",
-              "projects/date-time-picker-demo/tsconfig.spec.json",
-              "projects/date-time-picker-demo/e2e/tsconfig.json"
+              "projects/datetime-picker-demo/tsconfig.app.json",
+              "projects/datetime-picker-demo/tsconfig.spec.json",
+              "projects/datetime-picker-demo/e2e/tsconfig.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -145,17 +145,17 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/date-time-picker-demo/e2e/protractor.conf.js",
-            "devServerTarget": "date-time-picker-demo:serve"
+            "protractorConfig": "projects/datetime-picker-demo/e2e/protractor.conf.js",
+            "devServerTarget": "datetime-picker-demo:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "date-time-picker-demo:serve:production"
+              "devServerTarget": "datetime-picker-demo:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "date-time-picker"
+  "defaultProject": "datetime-picker"
 }

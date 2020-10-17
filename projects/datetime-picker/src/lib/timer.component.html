@@ -1,0 +1,56 @@
+<ng-timer-container
+  [upBtnAriaLabel]="upHourButtonLabel"
+  [downBtnAriaLabel]="downHourButtonLabel"
+  [upBtnDisabled]="!upHourEnabled()"
+  [downBtnDisabled]="!downHourEnabled()"
+  [boxValue]="hourBoxValue"
+  [value]="hourValue"
+  [min]="0"
+  [max]="23"
+  [step]="stepHour"
+  [inputLabel]="'Hour'"
+  (inputChange)="setHourValueViaInput($event)"
+  (valueChange)="setHourValue($event)"
+></ng-timer-container>
+<ng-timer-container
+  [showDivider]="true"
+  [upBtnAriaLabel]="upMinuteButtonLabel"
+  [downBtnAriaLabel]="downMinuteButtonLabel"
+  [upBtnDisabled]="!upMinuteEnabled()"
+  [downBtnDisabled]="!downMinuteEnabled()"
+  [value]="minuteValue"
+  [min]="0"
+  [max]="59"
+  [step]="stepMinute"
+  [inputLabel]="'Minute'"
+  (inputChange)="setMinuteValue($event)"
+  (valueChange)="setMinuteValue($event)"
+></ng-timer-container>
+<ng-timer-container
+  *ngIf="showSecondsTimer"
+  [showDivider]="true"
+  [upBtnAriaLabel]="upSecondButtonLabel"
+  [downBtnAriaLabel]="downSecondButtonLabel"
+  [upBtnDisabled]="!upSecondEnabled()"
+  [downBtnDisabled]="!downSecondEnabled()"
+  [value]="secondValue"
+  [min]="0"
+  [max]="59"
+  [step]="stepSecond"
+  [inputLabel]="'Second'"
+  (inputChange)="setSecondValue($event)"
+  (valueChange)="setSecondValue($event)"
+></ng-timer-container>
+
+<div *ngIf="hour12Timer" class="dtp-timer-hour12">
+  <button
+    class="dtp-control-button dtp-timer-hour12-box"
+    type="button"
+    tabindex="0"
+    (click)="setMeridian($event)"
+  >
+    <span class="dtp-control-button-content" tabindex="-1">
+      {{ hour12ButtonLabel }}
+    </span>
+  </button>
+</div>

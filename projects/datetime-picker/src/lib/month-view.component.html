@@ -1,0 +1,31 @@
+<table
+  class="dtp-calendar-table dtp-calendar-month-table"
+  [class.dtp-calendar-only-current-month]="hideOtherMonths"
+>
+  <thead class="dtp-calendar-header">
+    <tr class="dtp-weekdays">
+      <th
+        *ngFor="let weekday of weekdays"
+        [attr.aria-label]="weekday.long"
+        class="dtp-weekday"
+        scope="col"
+      >
+        <span>{{ weekday.short }}</span>
+      </th>
+    </tr>
+    <tr>
+      <th class="dtp-calendar-table-divider" aria-hidden="true" colspan="7"></th>
+    </tr>
+  </thead>
+  <tbody
+    ng-calendar-body
+    role="grid"
+    [rows]="days"
+    [todayValue]="todayDate"
+    [selectedValues]="selectedDates"
+    [selectMode]="selectMode"
+    [activeCell]="activeCell"
+    (keydown)="handleCalendarKeydown($event)"
+    (select)="selectCalendarCell($event)"
+  ></tbody>
+</table>

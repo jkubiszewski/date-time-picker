@@ -36,7 +36,8 @@ import { OwlDialogModule } from '../dialog/dialog.module';
         OwlDateTimeInlineComponent,
         OwlMultiYearViewComponent,
         OwlYearViewComponent,
-        OwlMonthViewComponent
+        OwlMonthViewComponent,
+        OwlTimerBoxComponent
     ],
     declarations: [
         OwlDateTimeTriggerDirective,

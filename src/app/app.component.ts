@@ -3,7 +3,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Moment } from 'moment';
 import * as moment from 'moment-timezone';
 
-import { OwlDateTimeComponent } from '../../projects/picker/src/public_api';
+import { OwlDateTimeComponent } from '../../projects/picker/src/public-api';
 
 @Component({
   selector: 'app-root',

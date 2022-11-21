@@ -181,6 +181,10 @@ export class MomentDateTimeAdapter extends DateTimeAdapter<Moment> {
         return this.clone(date).isValid();
     }
 
+    public isValidFormat(value: any, parseFormat: any): boolean {
+        return moment(value, parseFormat, true).isValid();
+    }
+
     public invalid(): Moment {
         return moment.invalid();
     }

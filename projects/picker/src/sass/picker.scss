@@ -671,3 +671,18 @@ $theme-color: #3f51b5;
   position: absolute;
   width: 1px;
 }
+
+.owl-hour-input {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+
+  owl-date-time-timer-box {
+    width: auto;
+  }
+
+  .owl-dt-timer-hour12 button{
+    display: flex;
+  }
+}

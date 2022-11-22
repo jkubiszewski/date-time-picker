@@ -18,3 +18,4 @@ export {
 export { OwlDateTimeInlineComponent } from './lib/date-time/date-time-inline.component';
 export { OwlDateTimeComponent } from './lib/date-time/date-time-picker.component';
 export { OwlTimerBoxComponent } from './lib/date-time/timer-box.component';
+export { OwlHourInputComponent } from './lib/date-time/hour-input.component'

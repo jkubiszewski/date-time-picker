@@ -1,0 +1,27 @@
+<owl-date-time-timer-box
+    [upBtnAriaLabel]="upHourButtonLabel"
+    [downBtnAriaLabel]="downHourButtonLabel"
+    [upBtnDisabled]="upBtnDisabled"
+    [downBtnDisabled]="downBtnDisabled"
+    [boxValue]="boxValue"
+    [value]="value"
+    [min]="0"
+    [max]="23"
+    [step]="step"
+    [inputLabel]="'Hour'"
+    (inputChange)="setHourValueViaInput($event)"
+    (valueChange)="setHourValue($event)"
+></owl-date-time-timer-box>
+
+<div *ngIf="hour12Timer" class="owl-dt-timer-hour12">
+    <button
+        class="owl-dt-control-button owl-dt-timer-hour12-box"
+        type="button"
+        tabindex="0"
+        (click)="setMeridian()"
+    >
+        <span class="owl-dt-control-button-content" tabindex="-1">
+            {{ hour12ButtonLabel }}
+        </span>
+    </button>
+</div>

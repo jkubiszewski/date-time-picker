@@ -24,6 +24,7 @@ import { NumberFixedLenPipe } from './numberedFixLen.pipe';
 import { OwlCalendarComponent } from './calendar.component';
 import { OwlDateTimeInlineComponent } from './date-time-inline.component';
 import { OwlDialogModule } from '../dialog/dialog.module';
+import { OwlHourInputComponent } from './hour-input.component';
 
 @NgModule({
     imports: [CommonModule, OverlayModule, OwlDialogModule, A11yModule],
@@ -37,7 +38,8 @@ import { OwlDialogModule } from '../dialog/dialog.module';
         OwlMultiYearViewComponent,
         OwlYearViewComponent,
         OwlMonthViewComponent,
-        OwlTimerBoxComponent
+        OwlTimerBoxComponent,
+        OwlHourInputComponent
     ],
     declarations: [
         OwlDateTimeTriggerDirective,
@@ -49,6 +51,7 @@ import { OwlDialogModule } from '../dialog/dialog.module';
         OwlMonthViewComponent,
         OwlTimerComponent,
         OwlTimerBoxComponent,
+        OwlHourInputComponent,
         OwlCalendarComponent,
         OwlCalendarBodyComponent,
         NumberFixedLenPipe,

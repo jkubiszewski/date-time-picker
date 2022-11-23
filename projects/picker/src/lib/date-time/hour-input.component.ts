@@ -6,10 +6,12 @@ import {
     ChangeDetectionStrategy,
     Component,
     EventEmitter,
+    forwardRef,
     Input,
     Output
 } from '@angular/core';
 import { OwlDateTimeIntl } from './date-time-picker-intl.service';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
     exportAs: 'owlHourInput',
@@ -18,14 +20,29 @@ import { OwlDateTimeIntl } from './date-time-picker-intl.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
         '[class.owl-hour-input]': 'owlHourInputClass'
-    }
+    },
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => OwlHourInputComponent),
+            multi: true
+        }
+    ]
 })
-export class OwlHourInputComponent {
+export class OwlHourInputComponent implements ControlValueAccessor {
     @Input() upBtnAriaLabel: string;
     @Input() upBtnDisabled: boolean;
     @Input() downBtnAriaLabel: string;
     @Input() downBtnDisabled: boolean;
-    @Input() value: number;
+    private _value: number;
+    get value(): number {
+        return this._value;
+    }
+    @Input() set value(value: number) {
+        this._value = value;
+        this.onChange(value);
+        this.onTouch(value);
+    }
     @Input() min = 0;
     @Input() max = 23;
     @Input() step = 1;
@@ -79,7 +96,7 @@ export class OwlHourInputComponent {
         this.valueChanged(this.value - this.step);
     }
 
-    public setHourValueViaInput(hours: number): void {
+    public setValueViaInput(hours: number): void {
         if (this.value && this.isPM && hours >= 1 && hours <= 11) {
             hours = hours + 12;
         } else if (this.value && !this.isPM && hours === 12) {
@@ -90,7 +107,7 @@ export class OwlHourInputComponent {
         this.valueChanged(this.value);
     }
 
-    public setHourValue(hours: number): void {
+    public setValue(hours: number): void {
         if (hours < this.min) {
             this.value = this.max;
         } else if (hours > this.max) {
@@ -112,12 +129,27 @@ export class OwlHourInputComponent {
         }
 
         if (hours >= 0 && hours <= 23) {
-            this.setHourValue(hours);
+            this.setValue(hours);
         }
         this.valueChanged(this.value);
     }
 
     private valueChanged(value: number): void {
         this.valueChange.emit(value);
+    }
+
+    onChange: any = () => {};
+
+    onTouch: any = () => {};
+
+    writeValue(value: any) {
+        this.value = value;
+    }
+    registerOnChange(fn: any) {
+        this.onChange = fn;
+    }
+
+    registerOnTouched(fn: any) {
+        this.onTouch = fn;
     }
 }

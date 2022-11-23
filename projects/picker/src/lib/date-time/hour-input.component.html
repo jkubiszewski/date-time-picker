@@ -9,8 +9,8 @@
     [max]="23"
     [step]="step"
     [inputLabel]="'Hour'"
-    (inputChange)="setHourValueViaInput($event)"
-    (valueChange)="setHourValue($event)"
+    (inputChange)="setValueViaInput($event)"
+    (valueChange)="setValue($event)"
 ></owl-date-time-timer-box>
 
 <div *ngIf="hour12Timer" class="owl-dt-timer-hour12">

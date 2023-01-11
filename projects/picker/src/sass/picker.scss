@@ -682,7 +682,22 @@ $theme-color: #3f51b5;
     width: auto;
   }
 
-  .owl-dt-timer-hour12 button{
+  .owl-dt-timer-hour12 > .owl-dt-control-button{
     display: flex;
+
+
+
+    &[disabled] {
+      cursor: default !important;
+    }
+
+    &.owl-dt-timer-hour12-box[disabled] > .owl-dt-control-button-content,
+    &.owl-dt-timer-hour12-box[disabled]:hover > .owl-dt-control-button-content {
+        cursor: default !important;
+        background-color: rgba(239, 239, 239, 0.3) !important;
+        color: rgb(84, 84, 84) !important;
+    }
   }
 }
+
+

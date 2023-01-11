@@ -3,6 +3,7 @@
  */
 
 import {
+    AfterViewInit,
     ChangeDetectionStrategy,
     Component,
     EventEmitter,
@@ -29,7 +30,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
         }
     ]
 })
-export class OwlHourInputComponent implements ControlValueAccessor {
+export class OwlHourInputComponent
+    implements ControlValueAccessor, AfterViewInit {
     @Input() upBtnAriaLabel: string;
     @Input() upBtnDisabled: boolean;
     @Input() downBtnAriaLabel: string;
@@ -47,11 +49,19 @@ export class OwlHourInputComponent implements ControlValueAccessor {
     @Input() max = 23;
     @Input() step = 1;
     @Input() hour12Timer: boolean;
+    @Input() disabled: boolean = false;
     @Output() valueChange = new EventEmitter<number>();
 
     private isPM = false;
 
     constructor(private pickerIntl: OwlDateTimeIntl) {}
+
+    ngAfterViewInit(): void {
+        if (this.disabled) {
+            this.upBtnDisabled = true;
+            this.downBtnDisabled = true;
+        }
+    }
 
     get hour12ButtonLabel(): string {
         return this.isPM

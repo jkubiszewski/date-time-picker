@@ -19,6 +19,7 @@
         type="button"
         tabindex="0"
         (click)="setMeridian()"
+        [disabled]="disabled"
     >
         <span class="owl-dt-control-button-content" tabindex="-1">
             {{ hour12ButtonLabel }}

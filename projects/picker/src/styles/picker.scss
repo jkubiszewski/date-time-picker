@@ -145,7 +145,9 @@ $backdrop-animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1) !default;
   box-sizing: border-box;
   display: block;
   padding: 1.5em;
-  box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14),
+  box-shadow:
+    0 11px 15px -7px rgba(0, 0, 0, 0.2),
+    0px 24px 38px 3px rgba(0, 0, 0, 0.14),
     0px 9px 46px 8px rgba(0, 0, 0, 0.12);
   border-radius: 2px;
   overflow: auto;
@@ -332,10 +334,8 @@ $theme-color: #3f51b5;
     }
   }
 
-  .owl-dt-calendar-cell-active:focus
-    > .owl-dt-calendar-cell-content:not(.owl-dt-calendar-cell-selected),
-  :not(.owl-dt-calendar-cell-disabled):hover
-    > .owl-dt-calendar-cell-content:not(.owl-dt-calendar-cell-selected) {
+  .owl-dt-calendar-cell-active:focus > .owl-dt-calendar-cell-content:not(.owl-dt-calendar-cell-selected),
+  :not(.owl-dt-calendar-cell-disabled):hover > .owl-dt-calendar-cell-content:not(.owl-dt-calendar-cell-selected) {
     background-color: rgba(0, 0, 0, 0.04);
   }
 
@@ -494,7 +494,9 @@ $theme-color: #3f51b5;
 .owl-dt-popup-container {
   position: relative;
   width: 18.5em;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  box-shadow:
+    0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
     0 3px 14px 2px rgba(0, 0, 0, 0.12);
 
   .owl-dt-calendar,

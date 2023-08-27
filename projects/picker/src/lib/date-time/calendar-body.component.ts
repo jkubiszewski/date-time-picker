@@ -97,7 +97,10 @@ export class OwlCalendarBodyComponent implements OnInit {
     );
   }
 
-  constructor(private elmRef: ElementRef, private ngZone: NgZone) {}
+  constructor(
+    private elmRef: ElementRef,
+    private ngZone: NgZone
+  ) {}
 
   public ngOnInit() {}
 

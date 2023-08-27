@@ -1,6 +1,6 @@
 {
   "name": "ng-date-and-time-picker",
-  "version": "16.0.0",
+  "version": "16.1.0",
   "description": "Angular Date Time Picker",
   "keywords": [
     "Angular",
@@ -28,5 +28,6 @@
   },
   "dependencies": {
     "tslib": "^2.6.2"
-  }
+  },
+  "sideEffects": false
 }
